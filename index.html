@@ -1,2 +1,83 @@
-# my_game1
-this is a little web game
+<!DOCTYPE html>
+<html>
+<head>
+    <title>井字棋游戏</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        .board { display: grid; grid-template: repeat(3, 80px) / repeat(3, 80px); gap: 5px; margin: 20px auto; }
+        .cell { width: 80px; height: 80px; background: #f0f0f0; border: 3px solid #333; 
+                font-size: 2em; display: flex; align-items: center; justify-content: center; 
+                cursor: pointer; }
+        .winner { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>井字棋游戏</h1>
+    <div class="board">
+        <div class="cell" id="0"></div>
+        <div class="cell" id="1"></div>
+        <div class="cell" id="2"></div>
+        <div class="cell" id="3"></div>
+        <div class="cell" id="4"></div>
+        <div class="cell" id="5"></div>
+        <div class="cell" id="6"></div>
+        <div class="cell" id="7"></div>
+        <div class="cell" id="8"></div>
+    </div>
+    <button onclick="resetGame()">重新开始</button>
+    <p id="status">轮到玩家 X</p>
+
+<script>
+let cells = document.querySelectorAll('.cell');
+let status = document.getElementById('status');
+let winner = null;
+let turn = 'X';
+let board = Array(9).fill(null);
+
+function checkWin() {
+    const winConditions = [
+        [0,1,2],[3,4,5],[6,7,8], // 横
+        [0,3,6],[1,4,7],[2,5,8], // 竖
+        [0,4,8],[2,4,6]          // 斜
+    ];
+    for (let condition of winConditions) {
+        let [a,b,c] = condition;
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+            winner = board[a];
+            return true;
+        }
+    }
+    return false;
+}
+
+function checkDraw() {
+    return board.every(cell => cell !== null) && !winner;
+}
+
+cells.forEach(cell => {
+    cell.addEventListener('click', () => {
+        if (cell.textContent || winner) return;
+        cell.textContent = turn;
+        const index = parseInt(cell.getAttribute('id'));
+        board[index] = turn;
+        if (checkWin()) {
+            status.textContent = `玩家 ${winner} 获胜！`;
+        } else if (checkDraw()) {
+            status.textContent = "平局！";
+        } else {
+            turn = turn === 'X' ? 'O' : 'X';
+            status.textContent = `轮到玩家 ${turn}`;
+        }
+    });
+});
+
+function resetGame() {
+    board.fill(null);
+    cells.forEach(cell => cell.textContent = '');
+    status.textContent = "轮到玩家 X";
+    winner = null;
+    turn = 'X';
+}
+</script>
+</body>
+</html>
