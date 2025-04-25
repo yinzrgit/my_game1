@@ -4,10 +4,23 @@
     <title>井字棋游戏</title>
     <style>
         body { text-align: center; font-family: Arial, sans-serif; }
-        .board { display: grid; grid-template: repeat(3, 80px) / repeat(3, 80px); gap: 5px; margin: 20px auto; }
-        .cell { width: 80px; height: 80px; background: #f0f0f0; border: 3px solid #333; 
-                font-size: 2em; display: flex; align-items: center; justify-content: center; 
-                cursor: pointer; }
+        .board { 
+            display: grid; 
+            grid-template: repeat(3, 80px) / repeat(3, 80px); 
+            gap: 5px; 
+            margin: 20px auto; /* 修改这里，将棋盘居中 */
+        }
+        .cell { 
+            width: 80px; 
+            height: 80px; 
+            background: #f0f0f0; 
+            border: 3px solid #333; 
+            font-size: 2em; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+        }
         .winner { color: red; font-weight: bold; }
     </style>
 </head>
