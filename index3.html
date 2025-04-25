@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>井字棋游戏</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .board {
+            display: grid;
+            grid-template: repeat(3, 100px) / repeat(3, 100px);
+            gap: 5px;
+            margin: 20px auto;
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            background: #f0f0f0;
+            border: 2px solid #333;
+            font-size: 2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .cell.taken {
+            cursor: not-allowed;
+        }
+        .winner {
+            color: red;
+            font-weight: bold;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>井字棋游戏</h1>
+    <div class="board" id="board">
+        <!-- 生成的格子 -->
+    </div>
+    <button onclick="resetGame()">重新开始</button>
+    <p id="status">轮到玩家 X</p>
+
+    <script>
+        const boardElement = document.getElementById('board');
+        const statusElement = document.getElementById('status');
+        let board = Array(9).fill(null);
+        let currentPlayer = 'X';
+        let winner = null;
+
+        // 初始化棋盘
+        function createBoard() {
+            boardElement.innerHTML = '';
+            board.forEach((_, index) => {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.setAttribute('data-index', index);
+                cell.addEventListener('click', handleCellClick);
+                boardElement.appendChild(cell);
+            });
+        }
+
+        // 处理单元格点击
+        function handleCellClick(event) {
+            const cell = event.target;
+            const index = cell.getAttribute('data-index');
+
+            if (board[index] || winner) return;
+
+            board[index] = currentPlayer;
+            cell.textContent = currentPlayer;
+            cell.classList.add('taken');
+
+            if (checkWin()) {
+                statusElement.textContent = `玩家 ${currentPlayer} 获胜！`;
+                winner = currentPlayer;
+            } else if (board.every(cell => cell)) {
+                statusElement.textContent = '平局！';
+            } else {
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                statusElement.textContent = `轮到玩家 ${currentPlayer}`;
+            }
+        }
+
+        // 检查胜利条件
+        function checkWin() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // 横向
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // 纵向
+                [0, 4, 8], [2, 4, 6]             // 对角线
+            ];
+
+            return winPatterns.some(pattern => {
+                const [a, b, c] = pattern;
+                return board[a] && board[a] === board[b] && board[a] === board[c];
+            });
+        }
+
+        // 重置游戏
+        function resetGame() {
+            board = Array(9).fill(null);
+            currentPlayer = 'X';
+            winner = null;
+            statusElement.textContent = '轮到玩家 X';
+            createBoard();
+        }
+
+        // 初始化游戏
+        createBoard();
+    </script>
+</body>
+</html>
