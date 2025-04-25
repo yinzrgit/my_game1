@@ -6,14 +6,25 @@
     <title>井字棋游戏</title>
     <style>
         body {
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
             font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .board {
             display: grid;
             grid-template: repeat(3, 100px) / repeat(3, 100px);
             gap: 5px;
-            margin: 20px auto;
+            margin: 20px 0;
         }
         .cell {
             width: 100px;
@@ -42,12 +53,14 @@
     </style>
 </head>
 <body>
-    <h1>井字棋游戏</h1>
-    <div class="board" id="board">
-        <!-- 生成的格子 -->
+    <div class="container">
+        <h1>井字棋游戏</h1>
+        <div class="board" id="board">
+            <!-- 生成的格子 -->
+        </div>
+        <button onclick="resetGame()">重新开始</button>
+        <p id="status">轮到玩家 X</p>
     </div>
-    <button onclick="resetGame()">重新开始</button>
-    <p id="status">轮到玩家 X</p>
 
     <script>
         const boardElement = document.getElementById('board');
